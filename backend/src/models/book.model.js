@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 
 const bookSchema = new mongoose.Schema({
-    title : {
+    title: {
         type: String,
         required: true
     },
-    caption : {
+    caption: {
         type: String,
     },
-    image : {
+    image: {
         type: String,
         required: true
     },
@@ -23,7 +23,7 @@ const bookSchema = new mongoose.Schema({
         ref: "User",
         required: true
     }
-}, {timestamps: true});
+}, { timestamps: true });
 
 const Book = mongoose.model("Book", bookSchema);
 

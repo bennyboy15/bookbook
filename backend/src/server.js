@@ -3,12 +3,14 @@ import { config } from "dotenv";
 import authRoutes from "./routes/auth.routes.js";
 import bookRoutes from "./routes/book.routes.js";
 import { connectDB } from "./lib/db.js";
+import cors from "cors";
 
 config();
 const app = express();
 
 const PORT = process.env.PORT || 5000;
 app.use(express.json());
+app.use(cors());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/books", bookRoutes);
