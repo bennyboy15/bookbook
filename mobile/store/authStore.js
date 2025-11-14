@@ -6,7 +6,7 @@ export const useAuthStore = create((set,get) => ({
     token: null,
     isLoading: false,
 
-    register: async (username, email, password) => {
+    register: async (name, username, email, password) => {
         try {
             set({isLoading: true});
             const response = await fetch("http://localhost:5000/api/auth/register", {
@@ -14,7 +14,7 @@ export const useAuthStore = create((set,get) => ({
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({username,email,password})
+                body: JSON.stringify({name, username,email,password})
             });
             const data = await response.json();
 

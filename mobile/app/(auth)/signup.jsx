@@ -7,6 +7,7 @@ import { useRouter } from 'expo-router';
 import { useAuthStore } from '../../store/authStore.js';
 
 export default function Signup() {
+  const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,6 +33,27 @@ export default function Signup() {
             <Text style={styles.subtitle}>Share your favorite reads</Text>
           </View>
           <View style={styles.formContainer}>
+            {/* NAME INPUT */}
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Full Name</Text>
+              <View style={styles.inputContainer}>
+                <Ionicons
+                  name="document-outline"
+                  size={20}
+                  color={COLORS.primary}
+                  style={styles.inputIcon}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="John Doe"
+                  placeholderTextColor={COLORS.placeholderText}
+                  value={name}
+                  onChangeText={setName}
+                  autoCapitalize="none"
+                />
+              </View>
+            </View>
+
             {/* USERNAME INPUT */}
             <View style={styles.inputGroup}>
               <Text style={styles.label}>Username</Text>
