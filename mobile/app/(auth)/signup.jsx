@@ -18,7 +18,8 @@ export default function Signup() {
   const router = useRouter();
 
   async function handleSignup() {
-    const result = await register(username, email, password);
+
+    const result = await register(name, username, email, password);
 
     if (!result.success) Alert.alert("Error", result.error);
   }
@@ -48,7 +49,7 @@ export default function Signup() {
                   placeholder="John Doe"
                   placeholderTextColor={COLORS.placeholderText}
                   value={name}
-                  onChangeText={setName}
+                  onChangeText={text => { setName(text); }}
                   autoCapitalize="none"
                 />
               </View>
@@ -69,7 +70,7 @@ export default function Signup() {
                   placeholder="johndoe"
                   placeholderTextColor={COLORS.placeholderText}
                   value={username}
-                  onChangeText={setUsername}
+                  onChangeText={text => { setUsername(text); }}
                   autoCapitalize="none"
                 />
               </View>
@@ -90,7 +91,7 @@ export default function Signup() {
                   placeholder="johndoe@gmail.com"
                   value={email}
                   placeholderTextColor={COLORS.placeholderText}
-                  onChangeText={setEmail}
+                  onChangeText={text => { setEmail(text); }}
                   keyboardType="email-address"
                   autoCapitalize="none"
                 />
@@ -112,7 +113,7 @@ export default function Signup() {
                   placeholder="******"
                   placeholderTextColor={COLORS.placeholderText}
                   value={password}
-                  onChangeText={setPassword}
+                  onChangeText={text => { setPassword(text); }}
                   secureTextEntry={!showPassword}
                 />
                 <TouchableOpacity
