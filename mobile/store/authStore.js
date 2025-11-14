@@ -15,7 +15,7 @@ export const useAuthStore = create((set, get) => ({
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ name, username, email, password })
+                body: JSON.stringify({ name: name, email: email, username: username, password: password })
             });
             const data = await response.json();
 

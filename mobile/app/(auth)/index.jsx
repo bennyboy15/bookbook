@@ -1,16 +1,23 @@
-import { ActivityIndicator, KeyboardAvoidingView, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, KeyboardAvoidingView, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import styles from "../../assets/styles/login.styles.js";
 import { useState } from 'react';
 import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS from '../../constants/colors.js';
-import { Link } from "expo-router"
+import { Link } from "expo-router";
+import {useAuthStore} from "../../store/authStore.js"
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const {user, isLoading, login} = useAuthStore();
+
+  async function  handleLogin() {
+    const result = await login(username,password);
+
+    if (!result.success) Alert.alert("Error", result.error);
+  }
 
   return (
     <KeyboardAvoidingView style={{flex: 1}} behavior={Platform.OS === "ios" ? "padding" : "height"}>
@@ -79,7 +86,7 @@ export default function Login() {
             </View>
 
             {/* LOGIN BTN */}
-            <TouchableOpacity style={styles.button} onPress={() => console.log("LOGIN")} disabled={isLoading}>
+            <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={isLoading}>
               {isLoading ? (
                 <ActivityIndicator color="#fff" />
               ) : (
