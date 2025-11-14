@@ -4,6 +4,7 @@
   "scripts": {
     "install:all": "npm run install:backend && npm run install:mobile",
     "install:backend": "cd backend && npm install",
-    "install:mobile": "cd mobile && npm install"
+    "install:mobile": "cd mobile && npm install",
+    "start": "cd backend && node src/server.js"
   }
 }
