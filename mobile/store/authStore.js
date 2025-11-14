@@ -9,7 +9,7 @@ export const useAuthStore = create((set,get) => ({
     register: async (name, username, email, password) => {
         try {
             set({isLoading: true});
-            const response = await fetch("http://localhost:5000/api/auth/register", {
+            const response = await fetch("https://bookbook-8jgx.onrender.com/api/auth/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
