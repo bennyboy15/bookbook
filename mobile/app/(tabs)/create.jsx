@@ -1,24 +1,40 @@
-import { Text, KeyboardAvoidingView, Platform, ScrollView, View, TextInput, TouchableOpacity, Alert } from 'react-native'
-import { useState } from 'react';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import styles from '../../assets/styles/create.styles.js';
-import COLORS from '../../constants/colors.js';
+import { useState } from "react";
+import {
+  View,
+  Text,
+  Platform,
+  KeyboardAvoidingView,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  Image,
+  ActivityIndicator,
+} from "react-native";
+import { useRouter } from "expo-router";
+import styles from "../../assets/styles/create.styles";
+import { Ionicons } from "@expo/vector-icons";
+import COLORS from "../../constants/colors";
+import { useAuthStore } from "../../store/authStore";
+
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
-import { Image } from "expo-image";
+import { RENDER_API_URL } from "../../constants/api";
 
 export default function Create() {
   const [title, setTitle] = useState("");
   const [caption, setCaption] = useState("");
   const [rating, setRating] = useState(3);
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState(null); // to display the selected image
   const [imageBase64, setImageBase64] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
+  const { token } = useAuthStore();
 
-  async function pickImage() {
+  console.log(token);
+
+  const pickImage = async () => {
     try {
       // request permission if needed
       if (Platform.OS !== "web") {
@@ -59,13 +75,68 @@ export default function Create() {
       console.error("Error picking image:", error);
       Alert.alert("Error", "There was a problem selecting your image");
     }
-  }
+  };
 
-  async function handleSubmit() {
+  const handleSubmit = async () => {
+    if (!title || !caption || !imageBase64 || !rating) {
+      Alert.alert("Error", "Please fill in all fields");
+      return;
+    }
 
-  }
+    try {
+      setLoading(true);
 
-  function renderRatingPicker() {
+      const uriParts = image.split(".");
+      const fileType = uriParts[uriParts.length - 1];
+      const imageType = fileType ? `image/${fileType.toLowerCase()}` : "image/jpeg";
+
+      const imageDataUrl = `data:${imageType};base64,${imageBase64}`;
+
+      const response = await fetch(`${RENDER_API_URL}/books`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          caption,
+          rating: rating.toString(),
+          image: imageDataUrl,
+        }),
+      });
+
+      // Add debugging
+      const responseText = await response.text();
+      console.log("Response status:", response.status);
+      console.log("Response body:", responseText);
+
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (e) {
+        console.error("JSON parse error:", e);
+        throw new Error(`Invalid JSON response: ${responseText.substring(0, 200)}`);
+      }
+
+      if (!response.ok) throw new Error(data.message || "Something went wrong");
+
+      Alert.alert("Success", "Your book recommendation has been posted!");
+      setTitle("");
+      setCaption("");
+      setRating(3);
+      setImage(null);
+      setImageBase64(null);
+      router.push("/");
+    } catch (error) {
+      console.error("Error creating post:", error);
+      Alert.alert("Error", error.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const renderRatingPicker = () => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
       stars.push(
@@ -79,13 +150,15 @@ export default function Create() {
       );
     }
     return <View style={styles.ratingContainer}>{stars}</View>;
-  }
+  };
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
       <ScrollView contentContainerStyle={styles.container} style={styles.scrollViewStyle}>
         <View style={styles.card}>
-
           {/* HEADER */}
           <View style={styles.header}>
             <Text style={styles.title}>Add Book Recommendation</Text>
@@ -162,11 +235,9 @@ export default function Create() {
                 </>
               )}
             </TouchableOpacity>
-
           </View>
         </View>
       </ScrollView>
-
     </KeyboardAvoidingView>
-  )
+  );
 }
