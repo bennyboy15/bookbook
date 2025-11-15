@@ -1,9 +1,12 @@
-import { Text, KeyboardAvoidingView, Platform, ScrollView, View, TextInput, TouchableOpacity } from 'react-native'
+import { Text, KeyboardAvoidingView, Platform, ScrollView, View, TextInput, TouchableOpacity, Alert } from 'react-native'
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import styles from '../../assets/styles/create.styles.js';
 import COLORS from '../../constants/colors.js';
+import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
+import { Image } from "expo-image";
 
 export default function Create() {
   const [title, setTitle] = useState("");
@@ -16,14 +19,53 @@ export default function Create() {
   const router = useRouter();
 
   async function pickImage() {
+    try {
+      // request permission if needed
+      if (Platform.OS !== "web") {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
+        if (status !== "granted") {
+          Alert.alert("Permission Denied", "We need camera roll permissions to upload an image");
+          return;
+        }
+      }
+
+      // launch image library
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: "images",
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.5, // lower quality for smaller base64
+        base64: true,
+      });
+
+      if (!result.canceled) {
+        setImage(result.assets[0].uri);
+
+        // if base64 is provided, use it
+
+        if (result.assets[0].base64) {
+          setImageBase64(result.assets[0].base64);
+        } else {
+          // otherwise, convert to base64
+          const base64 = await FileSystem.readAsStringAsync(result.assets[0].uri, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+
+          setImageBase64(base64);
+        }
+      }
+    } catch (error) {
+      console.error("Error picking image:", error);
+      Alert.alert("Error", "There was a problem selecting your image");
+    }
   }
 
   async function handleSubmit() {
 
   }
 
-  function renderRatingPicker(){
+  function renderRatingPicker() {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
       stars.push(
@@ -43,7 +85,7 @@ export default function Create() {
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <ScrollView contentContainerStyle={styles.container} style={styles.scrollViewStyle}>
         <View style={styles.card}>
-          
+
           {/* HEADER */}
           <View style={styles.header}>
             <Text style={styles.title}>Add Book Recommendation</Text>
@@ -120,7 +162,8 @@ export default function Create() {
                 </>
               )}
             </TouchableOpacity>
-        </View>      
+
+          </View>
         </View>
       </ScrollView>
 
