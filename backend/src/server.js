@@ -2,6 +2,7 @@ import express from "express";
 import { config } from "dotenv";
 import authRoutes from "./routes/auth.routes.js";
 import bookRoutes from "./routes/book.routes.js";
+import userRoutes from "./routes/user.routes.js";
 import { connectDB } from "./lib/db.js";
 import cors from "cors";
 import job from "./lib/cron.js";
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use(cors({origin: "*"}));
 
 app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
 app.use("/api/books", bookRoutes);
 
 app.listen(PORT, () => {

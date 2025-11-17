@@ -5,16 +5,16 @@ import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS from '../../constants/colors.js';
 import { Link } from "expo-router";
-import {useAuthStore} from "../../store/authStore.js"
+import { useAuthStore } from "../../store/authStore.js"
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const {user, isLoading, login, isCheckingAuth} = useAuthStore();
+  const { isLoading, login, isCheckingAuth } = useAuthStore();
 
-  async function  handleLogin() {
-    const result = await login(username,password);
+  async function handleLogin() {
+    const result = await login(username, password);
 
     if (!result.success) Alert.alert("Error", result.error);
   }
@@ -22,7 +22,7 @@ export default function Login() {
   if (isCheckingAuth) return null;
 
   return (
-    <KeyboardAvoidingView style={{flex: 1}} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <View style={styles.container}>
 
         <View style={styles.topIllustration}>

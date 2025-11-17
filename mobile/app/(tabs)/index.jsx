@@ -38,9 +38,6 @@ export default function Home() {
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Failed to fetch books");
 
-      // todo fix it later
-      // setBooks((prevBooks) => [...prevBooks, ...data.books]);
-
       const uniqueBooks =
         refresh || pageNum === 1
           ? data.books
@@ -132,7 +129,7 @@ export default function Home() {
         onEndReachedThreshold={0.1}
         ListHeaderComponent={
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>BookWorm 🐛</Text>
+            <Text style={styles.headerTitle}>Book Book 📖</Text>
             <Text style={styles.headerSubtitle}>Discover great reads from the community👇</Text>
           </View>
         }

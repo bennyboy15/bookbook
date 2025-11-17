@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Alert } from "react-native";
-import { useAuthStore } from "../store/authStore";
+import { useAuthStore } from "../store/authStore.js";
 import styles from "../assets/styles/profile.styles";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS from "../constants/colors";
