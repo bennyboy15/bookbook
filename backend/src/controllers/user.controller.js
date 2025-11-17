@@ -1,11 +1,16 @@
+import mongoose from "mongoose";
 import Follow from "../models/follows.model.js";
 import User from "../models/user.model.js";
 
 export async function getFollowers(req, res) {
     try {
         const { id } = req.params;
-        const followers = await Follow.find({ following_id: id }).populate("follower_id", "name username profileImage");
-        return res.status(200).json({followers:followers, follower_count:followers.length});
+        const objectId = new mongoose.Types.ObjectId(id);
+
+        const followers = await Follow.find({ following_id: objectId }).populate("follower_id", "name username profileImage");
+        const followering = await Follow.find({ follower_id: objectId }).populate("following_id", "name username profileImage");
+        //return res.status(200).json({followering:followering, followers:followers, follower_count:followers.length, followering_count:followering.length});
+        return res.status(200).json({follower_count:followers.length, followering_count:followering.length});
     } catch (error) {
         console.log("Error in getFollowers user controller", error);
         return res.status(500).json({ message: "Internal Server Error" });
