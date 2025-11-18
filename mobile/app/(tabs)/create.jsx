@@ -1,22 +1,10 @@
 import { useState } from "react";
-import {
-  View,
-  Text,
-  Platform,
-  KeyboardAvoidingView,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  Image,
-  ActivityIndicator,
-} from "react-native";
+import {View,Text,Platform,KeyboardAvoidingView,ScrollView,TextInput,TouchableOpacity,Alert,Image,ActivityIndicator,} from "react-native";
 import { useRouter } from "expo-router";
 import styles from "../../assets/styles/create.styles";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS from "../../constants/colors";
 import { useAuthStore } from "../../store/authStore";
-
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import { RENDER_API_URL } from "../../constants/api";
@@ -32,109 +20,69 @@ export default function Create() {
   const router = useRouter();
   const { token } = useAuthStore();
 
-  console.log(token);
-
   const pickImage = async () => {
-    try {
-      // request permission if needed
-      if (Platform.OS !== "web") {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  try {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: "images",
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.7, // compressed and smaller upload
+    });
 
-        if (status !== "granted") {
-          Alert.alert("Permission Denied", "We need camera roll permissions to upload an image");
-          return;
-        }
-      }
-
-      // launch image library
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: "images",
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 0.5, // lower quality for smaller base64
-        base64: true,
-      });
-
-      if (!result.canceled) {
-        setImage(result.assets[0].uri);
-
-        // if base64 is provided, use it
-
-        if (result.assets[0].base64) {
-          setImageBase64(result.assets[0].base64);
-        } else {
-          // otherwise, convert to base64
-          const base64 = await FileSystem.readAsStringAsync(result.assets[0].uri, {
-            encoding: FileSystem.EncodingType.Base64,
-          });
-
-          setImageBase64(base64);
-        }
-      }
-    } catch (error) {
-      console.error("Error picking image:", error);
-      Alert.alert("Error", "There was a problem selecting your image");
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
     }
-  };
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 
   const handleSubmit = async () => {
-    if (!title || !caption || !imageBase64 || !rating) {
-      Alert.alert("Error", "Please fill in all fields");
-      return;
-    }
+  if (!title || !caption || !image) {
+    Alert.alert("Error", "Please fill in all fields");
+    return;
+  }
 
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      const uriParts = image.split(".");
-      const fileType = uriParts[uriParts.length - 1];
-      const imageType = fileType ? `image/${fileType.toLowerCase()}` : "image/jpeg";
+    const formData = new FormData();
 
-      const imageDataUrl = `data:${imageType};base64,${imageBase64}`;
+    formData.append("title", title);
+    formData.append("caption", caption);
+    formData.append("rating", rating.toString());
 
-      const response = await fetch(`${RENDER_API_URL}/books`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title,
-          caption,
-          rating: rating.toString(),
-          image: imageDataUrl,
-        }),
-      });
+    // Very important: RN requires the format { uri, name, type }
+    formData.append("image", {
+      uri: image,
+      name: "upload.jpg",
+      type: "image/jpeg",
+    });
 
-      // Add debugging
-      const responseText = await response.text();
-      console.log("Response status:", response.status);
-      console.log("Response body:", responseText);
+    const response = await fetch(`${RENDER_API_URL}/books`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        // ❌ DO NOT set Content-Type manually for multipart
+        // fetch + FormData will set it for you
+      },
+      body: formData,
+    });
 
-      let data;
-      try {
-        data = JSON.parse(responseText);
-      } catch (e) {
-        console.error("JSON parse error:", e);
-        throw new Error(`Invalid JSON response: ${responseText.substring(0, 200)}`);
-      }
+    const data = await response.json();
 
-      if (!response.ok) throw new Error(data.message || "Something went wrong");
+    if (!response.ok) throw new Error(data.message);
 
-      Alert.alert("Success", "Your book recommendation has been posted!");
-      setTitle("");
-      setCaption("");
-      setRating(3);
-      setImage(null);
-      setImageBase64(null);
-      router.push("/");
-    } catch (error) {
-      console.error("Error creating post:", error);
-      Alert.alert("Error", error.message || "Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
+    Alert.alert("Success", "Your book was posted");
+    router.push("/");
+  } catch (err) {
+    Alert.alert("Error", err.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const renderRatingPicker = () => {
     const stars = [];
@@ -157,6 +105,7 @@ export default function Create() {
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
+      <TouchableOpacity onPress={() => console.log("TITLE",title, "RATING", rating, "CAPTION", caption)}><Text>TEST</Text></TouchableOpacity>
       <ScrollView contentContainerStyle={styles.container} style={styles.scrollViewStyle}>
         <View style={styles.card}>
           {/* HEADER */}

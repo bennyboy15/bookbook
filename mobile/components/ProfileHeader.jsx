@@ -13,17 +13,27 @@ export default function ProfileHeader() {
 
   async function getFollowers() {
     try {
-      const response = await fetch(`${RENDER_API_URL}/api/user/followers/${user._id}`, {
+      // use RENDER_API_URL (already contains '/api') — remove the extra '/api'
+      const response = await fetch(`${RENDER_API_URL}/user/followers/${user._id}`, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      const data = await response.json();
+      // Read raw text first so we don't crash if server returns HTML
+      const text = await response.text();
+      let data = {};
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        console.error("Failed to parse JSON from followers response", text);
+        // stop if response isn't JSON
+        return;
+      }
+
       if (!response.ok) {
         console.error("Failed to fetch followers:", data);
         return;
       }
-      console.log(data);
       setFollowerCount(data.follower_count);
       setFolloweringCount(data.followering_count);
     } catch (err) {
@@ -32,8 +42,8 @@ export default function ProfileHeader() {
   }
 
   useEffect(() => {
-    if (user) getFollowers()
-  },[user]);
+    if (user && token) getFollowers();
+  }, [user, token]);
 
   if (!user) return null;
 

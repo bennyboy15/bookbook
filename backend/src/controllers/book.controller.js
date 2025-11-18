@@ -2,32 +2,45 @@ import cloudinary from "../lib/cloudinary.js";
 import Book from "../models/book.model.js";
 
 export async function createBookReview(req, res) {
-    try {
-        const { title, caption, image, rating } = req.body;
+  try {
+    console.log("TEST", req.body);
+    const { title, caption, rating } = req.body;
 
-        if (!title || !image || !rating) {
-            return res.status(400).json({ message: "Missing required fields" });
+    if (!title || !rating || !req.file) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    // Upload buffer to Cloudinary
+    const uploadResponse = await cloudinary.uploader.upload_stream(
+      { folder: "books" },
+      async (error, result) => {
+        if (error) {
+          console.error("Cloudinary error:", error);
+          return res.status(500).json({ message: "Cloudinary upload failed" });
         }
 
-        const uploadResponse = await cloudinary.uploader.upload(image);
-        const imageURL = uploadResponse.secure_url;
-
         const book = new Book({
-            title,
-            caption,
-            image: imageURL,
-            rating,
-            user: req.user._id,
+          title,
+          caption,
+          rating,
+          image: result.secure_url,
+          user: req.user._id,
         });
 
         await book.save();
-
         return res.status(201).json(book);
-    } catch (error) {
-        console.log("Error in createBookReview bookController", error);
-        return res.status(500).json({ message: "Internal Server Error" });
-    }
+      }
+    );
+
+    // Multer gives us the file buffer → pass it to Cloudinary stream
+    uploadResponse.end(req.file.buffer);
+
+  } catch (error) {
+    console.log("Error in createBookReview controller", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
 }
+
 
 export async function getBookReviews(req, res) {
     try {

@@ -14,6 +14,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 job.start(); // CRON JOB
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors({origin: "*"}));
 
 app.use("/api/auth", authRoutes);

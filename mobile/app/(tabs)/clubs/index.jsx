@@ -11,23 +11,7 @@ import { useRouter } from 'expo-router';
 
 export default function Club() {
 
-  const [clubs, setClubs] = useState([{
-        "_id": "691bb6eb80b2b3487b6972c7",
-        "name": "SECOND CLUB",
-        "created_by": "69153bcb3ed9c346658f6690",
-        "createdAt": "2025-11-17T23:59:39.666Z",
-        "updatedAt": "2025-11-17T23:59:39.666Z",
-        "__v": 0
-    },
-    {
-        "_id": "691bc2be777f6c7206703008",
-        "name": "NEW CLUB",
-        "description": "Not as fun club",
-        "created_by": "69153bcb3ed9c346658f6690",
-        "createdAt": "2025-11-18T00:50:06.904Z",
-        "updatedAt": "2025-11-18T00:50:06.904Z",
-        "__v": 0
-    }]);
+  const [clubs, setClubs] = useState([]);
   const [isLoading, setIsLoading]= useState(false);
 
   const {user, token} = useAuthStore();
