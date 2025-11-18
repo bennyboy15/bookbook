@@ -5,11 +5,11 @@ import membershipRoutes from "./clubMembership.routes.js";
 
 const router = express.Router();
 
-// /clubs
+// /club
 router.get("/", protectRoute, getClubs);            // list all clubs
 router.post("/", protectRoute, createClub);         // create a new club
 
-// /clubs/:id
+// /club/:id
 router.get("/:id", protectRoute, getSpecificClub);   // single club details
 router.put("/:id", protectRoute, updateClub);        // update club info
 router.delete("/:id", protectRoute, deleteClub);     // delete club
