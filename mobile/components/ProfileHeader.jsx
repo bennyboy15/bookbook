@@ -6,6 +6,7 @@ import { RENDER_API_URL } from "../constants/api";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import COLORS from "../constants/colors.js";
+import { SquarePen } from 'lucide-react-native';
 
 export default function ProfileHeader() {
   const { user, token } = useAuthStore();
@@ -63,7 +64,9 @@ export default function ProfileHeader() {
         {/* TITLE + EDIT BUTTON */}
         <View style={headerStyles.title}>
           <Text style={headerStyles.text}>My Profile</Text>
-          <Ionicons name="pencil-outline" size={25} color={"white"} style={headerStyles.editButton} />
+          <View style={headerStyles.icon}>
+          <SquarePen color={"white"} size={25}/>
+          </View>
         </View>
 
         <View style={headerStyles.details}>
@@ -101,6 +104,11 @@ const headerStyles = StyleSheet.create({
   content: {
     padding: 30,
     justifyContent: 'center',
+  },
+  icon: {
+    padding: 10,
+    backgroundColor: "#89dbd277",
+    borderRadius: 25
   },
   title: {
     color: "white",

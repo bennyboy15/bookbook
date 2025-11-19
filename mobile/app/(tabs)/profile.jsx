@@ -126,12 +126,8 @@ export default function Profile() {
     <>
 
       <ProfileHeader />
+
       <View style={styles.container}>
-        <View style={profileStyles.grid}>
-          <StatCard style={profileStyles.statCard} />
-          <StatCard style={profileStyles.statCard} />
-          <StatCard style={profileStyles.statCard} />
-        </View>
 
         {/* YOUR RECOMMENDATIONS */}
         <View style={styles.booksHeader}>

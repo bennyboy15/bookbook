@@ -105,7 +105,6 @@ export default function Create() {
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <TouchableOpacity onPress={() => console.log("TITLE",title, "RATING", rating, "CAPTION", caption)}><Text>TEST</Text></TouchableOpacity>
       <ScrollView contentContainerStyle={styles.container} style={styles.scrollViewStyle}>
         <View style={styles.card}>
           {/* HEADER */}

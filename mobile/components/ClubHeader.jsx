@@ -4,6 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient'
 import COLORS from '../constants/colors.js'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
+import { Camera } from "lucide-react-native";
+
 
 export default function ClubHeader() {
   
