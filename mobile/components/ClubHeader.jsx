@@ -17,7 +17,7 @@ export default function ClubHeader() {
 
   return (
     <View style={{backgroundColor: COLORS.background,}}>
-    <LinearGradient colors={gradientOptions.colors} start={gradientOptions.startPoint} end={gradientOptions.endPoint} style={headerStyles.gradient}>
+    <View style={headerStyles.gradient}>
 
       {/* CONTENT */}
       <View style={headerStyles.content}>
@@ -39,7 +39,7 @@ export default function ClubHeader() {
           </View>
         </View>
       </View>
-    </LinearGradient>
+    </View>
     </View>
   )
 }
@@ -48,10 +48,11 @@ const headerStyles = StyleSheet.create({
   gradient: {
     display: "flex",
     flexDirection: "column",
-    flex: 1,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     maxHeight: 200,
+    height: 150,
+    backgroundColor: "#14b8a6"
   },
   content: {
     padding: 30,

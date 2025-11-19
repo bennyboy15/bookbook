@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {View, Alert, Text, FlatList, TouchableOpacity, ActivityIndicator, RefreshControl, StyleSheet,} from "react-native";
+import { View, Alert, Text, FlatList, TouchableOpacity, ActivityIndicator, RefreshControl, StyleSheet, } from "react-native";
 import { useRouter } from "expo-router";
 import { RENDER_API_URL } from "../../constants/api";
 import { useAuthStore } from "../../store/authStore";
@@ -123,14 +123,14 @@ export default function Profile() {
   if (isLoading && !refreshing) return <Loader />;
 
   return (
-      <View style={{ flex: 1, padding: 0 }}>
+    <>
+
       <ProfileHeader />
       <View style={styles.container}>
-
         <View style={profileStyles.grid}>
-        <StatCard style={profileStyles.statCard}/>
-        <StatCard style={profileStyles.statCard}/>
-        <StatCard style={profileStyles.statCard}/>
+          <StatCard style={profileStyles.statCard} />
+          <StatCard style={profileStyles.statCard} />
+          <StatCard style={profileStyles.statCard} />
         </View>
 
         {/* YOUR RECOMMENDATIONS */}
@@ -168,7 +168,8 @@ export default function Profile() {
         <LogoutButton />
 
       </View>
-    </View>
+    </>
+
   );
 }
 

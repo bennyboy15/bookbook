@@ -50,13 +50,13 @@ export default function ProfileHeader() {
 
   const gradientOptions = {
     colors: ['#14b8a6', '#059669'],
-    startPoint: { x: 0, y: 1 },
-    endPoint: { x: 1, y: 0 }
+    start: { x: 0, y: 1 },
+    end: { x: 1, y: 0 }
   }
 
   return (
     <View style={{backgroundColor: COLORS.background,}}>
-    <LinearGradient colors={gradientOptions.colors} start={gradientOptions.startPoint} end={gradientOptions.endPoint} style={headerStyles.gradient}>
+    <View style={headerStyles.gradient}>
 
       {/* CONTENT */}
       <View style={headerStyles.content}>
@@ -83,7 +83,7 @@ export default function ProfileHeader() {
           </View>
         </View>
       </View>
-    </LinearGradient>
+    </View>
     </View>
   );
 }
@@ -92,10 +92,11 @@ const headerStyles = StyleSheet.create({
   gradient: {
     display: "flex",
     flexDirection: "column",
-    flex: 1,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     maxHeight: 200,
+    height:200,
+    backgroundColor: "#14b8a6"
   },
   content: {
     padding: 30,
