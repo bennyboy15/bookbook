@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   bookItem: {
     flexDirection: "row",
-    backgroundColor: COLORS.cardBackground,
+    backgroundColor: "white",
     borderRadius: 12,
     padding: 12,
     marginBottom: 12,

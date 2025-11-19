@@ -11,6 +11,7 @@ import Loader from "../../components/Loader";
 import { sleep } from ".";
 import ProfileHeader from "../../components/ProfileHeader";
 import LogoutButton from "../../components/LogoutButton";
+import StatCard from "../../components/StatCard";
 
 export default function Profile() {
   const [books, setBooks] = useState([]);
@@ -126,11 +127,18 @@ export default function Profile() {
       <ProfileHeader />
       <View style={styles.container}>
 
+        <View style={profileStyles.grid}>
+        <StatCard style={profileStyles.statCard}/>
+        <StatCard style={profileStyles.statCard}/>
+        <StatCard style={profileStyles.statCard}/>
+        </View>
+
         {/* YOUR RECOMMENDATIONS */}
         <View style={styles.booksHeader}>
           <Text style={styles.booksTitle}>Your Recommendations 📚</Text>
           <Text style={styles.booksCount}>{books.length} books</Text>
         </View>
+
 
         <FlatList
           data={books}
@@ -156,8 +164,22 @@ export default function Profile() {
             </View>
           }
         />
+
         <LogoutButton />
+
       </View>
     </View>
   );
 }
+
+const profileStyles = StyleSheet.create({
+  grid: {
+    flexDirection: "row",
+    flex: 3,
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    gap: 2,
+    marginBottom: 12,
+    maxHeight: 100
+  }
+})
