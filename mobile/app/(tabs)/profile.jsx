@@ -179,7 +179,7 @@ const profileStyles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "space-between",
     gap: 2,
-    marginBottom: 12,
+    marginBottom: 20,
     maxHeight: 100
   }
 })

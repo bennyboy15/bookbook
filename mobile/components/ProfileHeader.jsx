@@ -1,8 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import { useAuthStore } from "../store/authStore";
 import { Image } from "expo-image";
-import styles from "../assets/styles/profile.styles";
-import { formatMemberSince } from "../lib/utils";
 import { useEffect, useState } from "react";
 import { RENDER_API_URL } from "../constants/api";
 import { Ionicons } from "@expo/vector-icons";

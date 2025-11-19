@@ -1,17 +1,14 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, View } from 'react-native'
 import { useRouter } from 'expo-router';
+import ClubHeader from "../../../components/ClubHeader"
 
 export default function ClubDetails() {
 
-  const router = useRouter();
-
   return (
-    <View>
-      <Text>ClubDetails</Text>
-      <TouchableOpacity onPress={() => router.replace("/(tabs)/clubs")}>
-        <Text>GOI BACK</Text>
-      </TouchableOpacity>
+    <View style={{ flex: 1, padding: 0 }}>
+      <ClubHeader />
+      <View style={styles.container}>
+      </View>
     </View>
   )
 }
