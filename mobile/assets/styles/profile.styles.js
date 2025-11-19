@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
   profileHeader: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: COLORS.cardBackground,
-    borderRadius: 16,
+    borderBottomRightRadius: 30,
+    borderBottomLeftRadius: 30,
     padding: 16,
     marginBottom: 16,
     shadowColor: COLORS.black,

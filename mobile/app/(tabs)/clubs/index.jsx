@@ -12,31 +12,30 @@ import { useRouter } from 'expo-router';
 export default function Club() {
 
   const [clubs, setClubs] = useState([]);
-  const [isLoading, setIsLoading]= useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const {user, token} = useAuthStore();
+  const { user, token } = useAuthStore();
 
-    const router = useRouter();
+  const router = useRouter();
 
-  async function getClubs(){
+  async function getClubs() {
     try {
-          setIsLoading(true);
-    
-          const response = await fetch(`${RENDER_API_URL}/club`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-    
-          const data = await response.json();
-          console.log("DATA", data);
-          if (!response.ok) throw new Error(data.message || "Failed to fetch book clubs");
-          
-          setClubs(data);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-          Alert.alert("Error", "Failed to fetch book clubs. Pull down to refresh.");
-        } finally {
-          setIsLoading(false);
-        }
+      setIsLoading(true);
+
+      const response = await fetch(`${RENDER_API_URL}/club`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Failed to fetch book clubs");
+
+      setClubs(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      Alert.alert("Error", "Failed to fetch book clubs. Pull down to refresh.");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -44,15 +43,17 @@ export default function Club() {
   }, [user]);
 
   return (
-    <View style={styles.container}>
-      <ProfileHeader />
-      {
-      isLoading 
-      ? <ActivityIndicator/> 
-      : (clubs?.map((club) => (
-        <ClubListItem key={club._id} club={club} onPress={() => router.push(`/clubs/${club._id}`)}/>
-      )))
-      }
+    <View style={{ flex: 1, padding: 0 }}>
+        <ProfileHeader />
+      <View style={styles.container}>
+        {
+          isLoading
+            ? <ActivityIndicator />
+            : (clubs?.map((club) => (
+              <ClubListItem key={club._id} club={club} onPress={() => router.push(`/clubs/${club._id}`)} />
+            )))
+        }
+      </View>
     </View>
   )
 }
