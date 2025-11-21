@@ -1,16 +1,19 @@
-import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import ClubHeader from "../../../components/ClubHeader";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from 'react';
 import { RENDER_API_URL } from '../../../constants/api';
 import { useAuthStore } from '../../../store/authStore.js';
+import CreateMeetingModal from '../../../components/CreateMeetingModal.jsx';
 
 export default function ClubDetails() {
   const { id } = useLocalSearchParams();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [club, setClub] = useState();
   const [memberCount, setMemberCount] = useState(0);
+  const [meetings, setMeetings] = useState([]);
 
   const { token } = useAuthStore();
 
@@ -46,6 +49,28 @@ export default function ClubDetails() {
     getClub();
   }, [id]);
 
+  async function handleCreateMeeting(meetingData) {
+    try {
+      const response = await fetch(`${RENDER_API_URL}/clubs/${club._id}/meetings`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(meetingData),
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Failed to create meeting");
+
+      setMeetings(prev => [data, ...prev]);
+      setShowModal(false);
+    } catch (error) {
+      console.error("Error creating meeting:", error);
+      alert(error.message || "Failed to create meeting");
+    }
+  }
+
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
@@ -59,6 +84,10 @@ export default function ClubDetails() {
     <View style={{ padding: 0 }}>
       <ClubHeader club={club} memberCount={memberCount} />
       <View style={styles.container}>
+        <TouchableOpacity onPress={() => setShowModal(!showModal)}>
+          <Text>Create meeting</Text>
+        </TouchableOpacity>
+        <CreateMeetingModal visible={showModal} onClose={() => setShowModal(false)} onSubmit={handleCreateMeeting} />
       </View>
     </View>
   )
@@ -71,8 +100,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#fff",
     display: "flex",
-    flexDirection:"row",
+    flexDirection: "row",
     gap: 12,
-    alignContent:"center"
+    alignContent: "center"
   },
+  container: {
+    padding: 10
+  }
 });

@@ -32,10 +32,10 @@ export default function ClubHeader({ club, memberCount }) {
                   <Text style={{ fontWeight: "bold" }}>{memberCount}</Text> Members |
                 </Text>
                 <Text style={{ color: "white" }}>Active since <Text style={{ fontWeight: "bold" }}>
-                  {new Date(club.createdAt).toLocaleDateString("en-AU", {
+                  {new Date(club?.createdAt).toLocaleDateString("en-AU", {
                     month: "short",
                     year: "numeric",
-                  })}
+                  }) || "N/A"}
                 </Text>
                 </Text>
               </View>
