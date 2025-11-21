@@ -29,7 +29,7 @@ export default function ClubHeader({ club, memberCount }) {
               <Text style={headerStyles.desc}>{club?.description}</Text>
               <View style={{ flexDirection: "row", gap: 8 }}>
                 <Text style={{ color: "white" }}>
-                  <Text style={{ fontWeight: "bold" }}>{memberCount}</Text> Members |
+                  <Text style={{ fontWeight: "bold" }}>{memberCount.count}</Text> Members |
                 </Text>
                 <Text style={{ color: "white" }}>Active since <Text style={{ fontWeight: "bold" }}>
                   {new Date(club?.createdAt).toLocaleDateString("en-AU", {

@@ -22,19 +22,20 @@ export default function ClubDetails() {
       setIsLoading(true);
 
       // CLUB
-      const response = await fetch(`${RENDER_API_URL}/club/${id}`, {
+      let response = await fetch(`${RENDER_API_URL}/club/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const data = await response.json();
+      let data = await response.json();
       if (!response.ok) throw new Error(data.message || "Failed to fetch club");
       setClub(data);
 
-      // CLUB
-      const response2 = await fetch(`${RENDER_API_URL}/club/${id}/count`, {
+      // MEMBER COUNT
+      response = await fetch(`${RENDER_API_URL}/club/${id}/count`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      data = await response2.json();
-      if (!response2.ok) throw new Error(data.message || "Failed to fetch club member count");
+      data = await response.json();
+      console.log("COUNT", data);
+      if (!response.ok) throw new Error(data.message || "Failed to fetch club member count");
       setMemberCount(data);
 
     } catch (error) {
@@ -51,7 +52,7 @@ export default function ClubDetails() {
 
   async function handleCreateMeeting(meetingData) {
     try {
-      const response = await fetch(`${RENDER_API_URL}/clubs/${club._id}/meetings`, {
+      const response = await fetch(`${RENDER_API_URL}/club/${club._id}/meetings`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
