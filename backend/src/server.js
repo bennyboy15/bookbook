@@ -4,7 +4,6 @@ import authRoutes from "./routes/auth.routes.js";
 import bookRoutes from "./routes/book.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import clubRoutes from "./routes/club.routes.js";
-import clubMeetingRoutes from "./routes/clubMeeting.routes.js";
 import { connectDB } from "./lib/db.js";
 import cors from "cors";
 import job from "./lib/cron.js";
@@ -22,7 +21,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/books", bookRoutes);
 app.use("/api/club", clubRoutes);
-app.use("/api/club-meeting", clubMeetingRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server running @ PORT ${PORT}`);

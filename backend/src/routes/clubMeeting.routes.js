@@ -1,10 +1,15 @@
 import express from "express";
-import { createClubMeeting,getClubMeeting } from "../controllers/clubMeeting.controller.js";
+import { createClubMeeting, getClubMeeting, updateClubMeeting, deleteClubMeeting } from "../controllers/clubMeeting.controller.js";
 import protectRoute from "../middleware/auth.middleware.js";
 
 const router = express.Router({mergeParams:true});
 
+// /club/:id/meetings/
 router.post("/", protectRoute, createClubMeeting);
-router.get("/:meeting", protectRoute, getClubMeeting);
+
+// /club/:id/meetings/:meeting
+router.put("/:meetingId", protectRoute, updateClubMeeting);
+router.get("/:meetingId", protectRoute, getClubMeeting);
+router.delete("/:meetingId", protectRoute, deleteClubMeeting);
 
 export default router;
