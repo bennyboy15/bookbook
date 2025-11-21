@@ -7,7 +7,7 @@ import { useRouter } from 'expo-router'
 import { Camera } from "lucide-react-native";
 
 
-export default function ClubHeader() {
+export default function ClubHeader({ club }) {
   
   const gradientOptions = {
     colors: ['#14b8a6', '#059669'],
@@ -28,8 +28,8 @@ export default function ClubHeader() {
           <Ionicons name="exit-outline" size={25} color={"white"} style={headerStyles.editButton} />
           </TouchableOpacity>
           <View>
-            <Text style={headerStyles.name}>Club Name</Text>
-            <Text style={headerStyles.desc}>@Description</Text>
+            <Text style={headerStyles.name}>{club?.name || "N/A"}</Text>
+            <Text style={headerStyles.desc}>{club?.description}</Text>
             <View style={{ flexDirection: "row", gap: 12 }}>
               <Text style={{ color: "white" }}>
                 <Text style={{ fontWeight: "bold" }}>14</Text> Members |

@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   bookCard: {
-    backgroundColor: COLORS.cardBackground,
+    backgroundColor: "white",
     borderRadius: 16,
     marginBottom: 20,
     padding: 16,
@@ -74,6 +74,8 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginBottom: 12,
     backgroundColor: COLORS.border,
+    borderWidth: 2,
+    borderColor: COLORS.border
   },
   bookImage: {
     width: "100%",
