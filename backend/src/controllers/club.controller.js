@@ -1,4 +1,5 @@
 import Club from "../models/club.model.js";
+import ClubMembership from "../models/clubMembership.model.js";
 
 export async function getClubs(req, res) {
     try {
@@ -9,6 +10,27 @@ export async function getClubs(req, res) {
         return res.status(500).json({ message: "Internal Server Error" });
     }
 }
+
+export async function getClubMembersCount(req, res) {
+    try {
+        const { id } = req.params;
+
+        // Optional: check if the club exists
+        const clubExists = await Club.exists({ _id: id });
+        if (!clubExists) {
+            return res.status(404).json({ message: "Club not found" });
+        }
+
+        // Count without fetching docs
+        const count = await ClubMembership.countDocuments({ club_id: id });
+
+        return res.status(200).json({ count });
+    } catch (error) {
+        console.log("Error in getClubMembersCount controller", error);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
 
 export async function createClub(req, res) {
     try {

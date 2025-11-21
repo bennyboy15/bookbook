@@ -10,6 +10,7 @@ export default function ClubDetails() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [club, setClub] = useState();
+  const [memberCount, setMemberCount] = useState(0);
 
   const { token } = useAuthStore();
 
@@ -17,14 +18,21 @@ export default function ClubDetails() {
     try {
       setIsLoading(true);
 
+      // CLUB
       const response = await fetch(`${RENDER_API_URL}/club/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Failed to fetch club");
-
       setClub(data);
+
+      // CLUB
+      const response2 = await fetch(`${RENDER_API_URL}/club/${id}/count`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      data = await response2.json();
+      if (!response2.ok) throw new Error(data.message || "Failed to fetch club member count");
+      setMemberCount(data);
 
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -49,7 +57,7 @@ export default function ClubDetails() {
 
   return (
     <View style={{ padding: 0 }}>
-      <ClubHeader club={club} />
+      <ClubHeader club={club} memberCount={memberCount} />
       <View style={styles.container}>
       </View>
     </View>

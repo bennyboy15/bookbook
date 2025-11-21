@@ -1,14 +1,11 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import { LinearGradient } from 'expo-linear-gradient'
 import COLORS from '../constants/colors.js'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import { Camera } from "lucide-react-native";
 
 
-export default function ClubHeader({ club }) {
-  
+export default function ClubHeader({ club, memberCount }) {
+
   const gradientOptions = {
     colors: ['#14b8a6', '#059669'],
     startPoint: { x: 0, y: 1 },
@@ -18,30 +15,34 @@ export default function ClubHeader({ club }) {
   const router = useRouter();
 
   return (
-    <View style={{backgroundColor: COLORS.background,}}>
-    <View style={headerStyles.gradient}>
+    <View style={{ backgroundColor: COLORS.background, }}>
+      <View style={headerStyles.gradient}>
 
-      {/* CONTENT */}
-      <View style={headerStyles.content}>
-        <View style={headerStyles.details}>
-          <TouchableOpacity onPress={() => router.replace("/(tabs)/clubs")}>
-          <Ionicons name="exit-outline" size={25} color={"white"} style={headerStyles.editButton} />
-          </TouchableOpacity>
-          <View>
-            <Text style={headerStyles.name}>{club?.name || "N/A"}</Text>
-            <Text style={headerStyles.desc}>{club?.description}</Text>
-            <View style={{ flexDirection: "row", gap: 12 }}>
-              <Text style={{ color: "white" }}>
-                <Text style={{ fontWeight: "bold" }}>14</Text> Members |
-              </Text>
-              <Text style={{ color: "white" }}>
-                Active since <Text style={{ fontWeight: "bold" }}>2022</Text> 
-              </Text>
+        {/* CONTENT */}
+        <View style={headerStyles.content}>
+          <View style={headerStyles.details}>
+            <TouchableOpacity onPress={() => router.replace("/(tabs)/clubs")}>
+              <Ionicons name="exit-outline" size={25} color={"white"} style={headerStyles.editButton} />
+            </TouchableOpacity>
+            <View>
+              <Text style={headerStyles.name}>{club?.name || "N/A"}</Text>
+              <Text style={headerStyles.desc}>{club?.description}</Text>
+              <View style={{ flexDirection: "row", gap: 8 }}>
+                <Text style={{ color: "white" }}>
+                  <Text style={{ fontWeight: "bold" }}>{memberCount}</Text> Members |
+                </Text>
+                <Text style={{ color: "white" }}>Active since <Text style={{ fontWeight: "bold" }}>
+                  {new Date(club.createdAt).toLocaleDateString("en-AU", {
+                    month: "short",
+                    year: "numeric",
+                  })}
+                </Text>
+                </Text>
+              </View>
             </View>
           </View>
         </View>
       </View>
-    </View>
     </View>
   )
 }
