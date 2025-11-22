@@ -81,4 +81,30 @@ export const useAuthStore = create((set, get) => ({
         }
     },
 
+    updateProfile: async (profileData) => {
+        try {
+            set({ isLoading: true });
+            const { token } = get();
+            const response = await fetch(`${RENDER_API_URL}/user`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(profileData)
+            });
+            const data = await response.json();
+
+            if (!response.ok) throw new Error(data.message || "Failed to update profile");
+
+            await AsyncStorage.setItem("user", JSON.stringify(data.user));
+            set({ user: data.user, isLoading: false });
+            return { success: true };
+
+        } catch (error) {
+            set({ isLoading: false });
+            return { success: false, error: error.message };
+        }
+    },
+
 }))

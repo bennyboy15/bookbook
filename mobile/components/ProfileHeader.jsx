@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useAuthStore } from "../store/authStore";
 import { Image } from "expo-image";
 import { useEffect, useState } from "react";
@@ -8,7 +8,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import COLORS from "../constants/colors.js";
 import { SquarePen } from 'lucide-react-native';
 
-export default function ProfileHeader() {
+export default function ProfileHeader({onPress}) {
   const { user, token } = useAuthStore();
   const [followerCount, setFollowerCount] = useState(0);
   const [followeringCount, setFolloweringCount] = useState(0);
@@ -64,9 +64,9 @@ export default function ProfileHeader() {
         {/* TITLE + EDIT BUTTON */}
         <View style={headerStyles.title}>
           <Text style={headerStyles.text}>My Profile</Text>
-          <View style={headerStyles.icon}>
+          <TouchableOpacity style={headerStyles.icon} onPress={onPress}>
           <SquarePen color={"white"} size={25}/>
-          </View>
+          </TouchableOpacity>
         </View>
 
         <View style={headerStyles.details}>

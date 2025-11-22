@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useAuthStore } from '../store/authStore.js';
 import { Image } from 'expo-image';
 import { Bell } from 'lucide-react-native';
@@ -14,7 +14,9 @@ export default function AccountBar() {
                 <Image source={{ uri: user.profileImage }} style={accountStyles.profileImage} />
                 <Text style={accountStyles.text}>Welcome back, {user.name}!</Text>
             </View>
-            <Bell size={20} color={"green"} style={accountStyles.icon} />
+            <TouchableOpacity style={accountStyles.icon}>
+            <Bell size={20} color={"green"} />
+            </TouchableOpacity>
         </View>
     )
 }

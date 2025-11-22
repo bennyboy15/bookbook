@@ -11,15 +11,16 @@ import Loader from "../../components/Loader";
 import { sleep } from ".";
 import ProfileHeader from "../../components/ProfileHeader";
 import LogoutButton from "../../components/LogoutButton";
-import StatCard from "../../components/StatCard";
+import UpdateProfileModal from "../../components/UpdateProfileModal";
 
 export default function Profile() {
   const [books, setBooks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [deleteBookId, setDeleteBookId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
-  const { token } = useAuthStore();
+  const { token, user, updateProfile } = useAuthStore();
 
   const router = useRouter();
 
@@ -125,7 +126,15 @@ export default function Profile() {
   return (
     <>
 
-      <ProfileHeader />
+      <ProfileHeader onPress={() => setShowModal(true)}/>
+
+      <UpdateProfileModal 
+        showModal={showModal}
+        onClose={() => setShowModal(false)}
+        onSave={updateProfile}
+        initialName={user?.name || ''}
+        initialEmail={user?.email || ''}
+      />
 
       <View style={styles.container}>
 
